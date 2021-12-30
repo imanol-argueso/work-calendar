@@ -1,0 +1,304 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Work calendar API",
+        "description": "This API provides access to data about work calendar of the Autonomous Community of the Basque Country. The data comes from the datasets of the Open Data Euskadi working calendar. The API provides data from 2014  to the current year.",
+        "version": "1.0"
+    },
+    "servers": [
+        {
+            "url": "https://calendario-laboral.000webhostapp.com"
+        }
+    ],
+    "paths": {
+        "/api/v1/festivities/bydate/{year}/{month}/{day}": {
+            "get": {
+                "tags": [
+                    "festivities by date"
+                ],
+                "summary": "List of festivities by date",
+                "description": "Get list of festivities by date.",
+                "operationId": "festivitiesByDate",
+                "parameters": [
+                    {
+                        "name": "year",
+                        "in": "path",
+                        "description": "Year",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "example": "2021"
+                    },
+                    {
+                        "name": "month",
+                        "in": "path",
+                        "description": "Month",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "example": "6"
+                    },
+                    {
+                        "name": "day",
+                        "in": "path",
+                        "description": "Day",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "example": "24"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Get list of festivities of the Autonomous Community of the Basque Country by date."
+                    },
+                    "default": {
+                        "description": "An error has occurred."
+                    }
+                }
+            }
+        },
+        "/api/v1/festivities/bydate/{year}/{month}": {
+            "get": {
+                "tags": [
+                    "festivities by date"
+                ],
+                "summary": "List of festivities by month",
+                "description": "Get list of festivities by month.",
+                "operationId": "festivitiesByMonth",
+                "parameters": [
+                    {
+                        "name": "year",
+                        "in": "path",
+                        "description": "Year",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "example": "2021"
+                    },
+                    {
+                        "name": "month",
+                        "in": "path",
+                        "description": "Month",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "example": "6"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Get list of festivities of the Autonomous Community of the Basque Country by month."
+                    },
+                    "default": {
+                        "description": "An error has occurred."
+                    }
+                }
+            }
+        },
+        "/api/v1/festivities/bydate/{year}": {
+            "get": {
+                "tags": [
+                    "festivities by date"
+                ],
+                "summary": "List of festivities by year",
+                "description": "Get list of festivities by year.",
+                "operationId": "festivitiesByYear",
+                "parameters": [
+                    {
+                        "name": "year",
+                        "in": "path",
+                        "description": "Year",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "example": "2021"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Get list of festivities of the Autonomous Community of the Basque Country by year."
+                    },
+                    "default": {
+                        "description": "An error has occurred."
+                    }
+                }
+            }
+        },
+        "/api/v1/festivities/bylocation/{territory}/{municipality}/bydate/{year}": {
+            "get": {
+                "tags": [
+                    "festivities by location"
+                ],
+                "summary": "List of festivities by municipality",
+                "description": "Get list of festivities by municipality and by year.",
+                "operationId": "festivitiesByMunicipality",
+                "parameters": [
+                    {
+                        "name": "territory",
+                        "in": "path",
+                        "description": "Id of territory",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "example": "20"
+                    },
+                    {
+                        "name": "municipality",
+                        "in": "path",
+                        "description": "Id of municipality",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "example": "20079"
+                    },
+                    {
+                        "name": "year",
+                        "in": "path",
+                        "description": "Year",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "example": "2021"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Get list of festivities of the Autonomous Community of the Basque Country by municipality."
+                    },
+                    "default": {
+                        "description": "An error has occurred."
+                    }
+                }
+            }
+        },
+        "/api/v1/festivities/bylocation/{territory}/bydate/{year}": {
+            "get": {
+                "tags": [
+                    "festivities by location"
+                ],
+                "summary": "List of festivities by territory",
+                "description": "Get list of festivities by territory and by year.",
+                "operationId": "festivitiesByTerritory",
+                "parameters": [
+                    {
+                        "name": "territory",
+                        "in": "path",
+                        "description": "Id of territory",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "example": "20"
+                    },
+                    {
+                        "name": "year",
+                        "in": "path",
+                        "description": "Year",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "example": "2021"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Get list of festivities of the Autonomous Community of the Basque Country by territory."
+                    },
+                    "default": {
+                        "description": "An error has occurred."
+                    }
+                }
+            }
+        },
+        "/api/v1/festivities/bylocation/bydate/{year}": {
+            "get": {
+                "tags": [
+                    "festivities by location"
+                ],
+                "summary": "List of festivities of the Basque Country",
+                "description": "Get list of festivities of the Autonomous Community of the Basque Country.",
+                "operationId": "basqueFestivities",
+                "parameters": [
+                    {
+                        "name": "year",
+                        "in": "path",
+                        "description": "Year",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "example": "2021"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Get list of festivities of the Autonomous Community of the Basque Country."
+                    },
+                    "default": {
+                        "description": "An error has occurred."
+                    }
+                }
+            }
+        },
+        "/api/v1/municipalities": {
+            "get": {
+                "tags": [
+                    "municipalities"
+                ],
+                "summary": "List of municipalities",
+                "operationId": "fcc8e6307f8a9252de98dd1f8807a9d8",
+                "responses": {
+                    "200": {
+                        "description": "Get list of municipalities of the Autonomous Community of the Basque Country."
+                    },
+                    "default": {
+                        "description": "An error has occurred."
+                    }
+                }
+            }
+        },
+        "/api/v1/territories": {
+            "get": {
+                "tags": [
+                    "territories"
+                ],
+                "summary": "List of territories",
+                "operationId": "8e50cb9d4b76ed1ca68cf036a0519308",
+                "responses": {
+                    "200": {
+                        "description": "Get list of territories of the Autonomous Community of the Basque Country."
+                    },
+                    "default": {
+                        "description": "An error has occurred."
+                    }
+                }
+            }
+        }
+    },
+    "security": [
+        []
+    ]
+}

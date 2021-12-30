@@ -1,0 +1,200 @@
+main, header {
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 2em;
+  width: 70%;
+  font-family: scandia-web,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
+  color:rgb(26, 24, 24);
+}
+@media (max-width: 900px) {
+  main, header {
+    width: 90%;
+  }
+}
+
+
+header {
+  text-transform: uppercase;
+}
+
+body {
+  background: url("/images/home.jpg") no-repeat top center; 
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 5em;
+}
+
+h1 {
+  font-weight: 700;
+  color: #fff;
+  font-size: 230%;
+}
+h2 {
+  margin-top: 1em;
+  font-weight: 500;
+}
+.news-block {
+  display:block;
+  margin-bottom: 2em;
+  float: left;
+}
+.more-info {
+  float: left;
+}
+a {
+  text-decoration: none;
+  color:#96b1eb;
+  font-weight: 600;
+  text-decoration: underline;
+}
+a:hover {
+  color: #255db6;
+}
+
+img { 
+    float: left;
+    margin: 0 1em 0.5em 1em;
+}
+
+p {
+    text-align: justify;
+    color: #fff;
+    font-size: 130%;
+}
+nav {
+  float: right;
+  font-size: 110%;
+}
+nav a {
+  margin-right: 1em;
+}
+.no-active {
+  text-decoration: none;
+  color: #fff;
+  margin-right: 1em;
+}
+.no-active:hover {
+  text-decoration: none;
+  color: #fff;
+  cursor: auto;
+}
+ul { 
+  list-style: none;
+  padding-left: 0;
+}
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #dddddd;
+  }
+  /* BUTTON */
+  .button-81 {
+    background-color: #fff;
+    border: 0 solid #e2e8f0;
+    border-radius: 1.5rem;
+    box-sizing: border-box;
+    color: #0d172a;
+    cursor: pointer;
+    display: inline-block;
+    font-family: "Basier circle",-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1;
+    padding: 1rem 1.6rem;
+    text-align: center;
+    text-decoration: none #0d172a solid;
+    text-decoration-thickness: auto;
+    transition: all .1s cubic-bezier(.4, 0, .2, 1);
+    box-shadow: 0px 1px 2px rgba(166, 175, 195, 0.25);
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    margin-right: 1em;
+    margin-bottom: 1em;
+  }
+  
+  .button-81:hover {
+    background-color: #1e293b;
+    color: #fff;
+    text-decoration: none;
+  }
+  
+  @media (min-width: 768px) {
+    .button-81 {
+      font-size: 1.125rem;
+      padding: 1rem 2rem;
+    }
+  }
+
+
+/* MENU RESPONSIVE */
+
+ /* Add a black background color to the top navigation */
+ .topnav {
+    background-color: #333;
+    overflow: hidden;
+  }
+  
+  /* Style the links inside the navigation bar */
+  .topnav a {
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+  }
+  
+  /* Change the color of links on hover */
+  .topnav a:hover {
+    background-color: #ddd;
+    color: black;
+  }
+  
+  /* Add an active class to highlight the current page */
+  .topnav a.active {
+    background-color: #04AA6D;
+    color: white;
+  }
+  
+  /* Hide the link that should open and close the topnav on small screens */
+  .topnav .icon {
+    display: none;
+  } 
+
+   /* When the screen is less than 600 pixels wide, hide all links, except for the first one ("Home"). Show the link that contains should open and close the topnav (.icon) */
+@media screen and (max-width: 600px) {
+    .topnav a:not(:first-child) {display: none;}
+    .topnav a.icon {
+      float: right;
+      display: block;
+    }
+  }
+  
+  /* The "responsive" class is added to the topnav with JavaScript when the user clicks on the icon. This class makes the topnav look good on small screens (display the links vertically instead of horizontally) */
+  @media screen and (max-width: 600px) {
+    .topnav.responsive {position: relative;}
+    .topnav.responsive a.icon {
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+    .topnav.responsive a {
+      float: none;
+      display: block;
+      text-align: left;
+    }
+  } 
