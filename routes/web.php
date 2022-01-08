@@ -26,8 +26,3 @@ Route::get('/festivos', function () {
         'festivities' => Festivity::all()
     ]);
 });
-Route::get('/municipios', function () {
-    return view('municipalities', [
-        'municipalities' => Festivity::query()->select('municipality_code','municipality_name_es','municipality_name_eu', 'territory_code', 'territory_name','latwgs84','lonwgs84')->where('municipality_code', '>', 50)->get()
-    ]);
-});

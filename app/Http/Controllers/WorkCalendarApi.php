@@ -5,20 +5,20 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Festivity;
 use App\Models\Municipality;
+use App\Models\MunicipalityForApi;
 use App\Models\FestivityDate;
 
 /**
 * @OA\Info(
-* title="Work calendar API", 
+* title="Basque work calendar API", 
 * version="1.0",
 * description="This API provides access to data about work calendar of the Autonomous Community of the Basque Country. The data comes from the datasets of the Open Data Euskadi working calendar. The API provides data from 2014  to the current year.")
 *
-* @OA\Server(url="https://calendario-laboral.000webhostapp.com")
+* @OA\Server(url="http://127.0.0.1:8000")
 */
 
 class WorkCalendarApi extends Controller
 {
-    
     function getFestivitiesFormattedForApi($festivities) {
         $festivityDates = [];
         $isInArray = false;
@@ -29,15 +29,15 @@ class WorkCalendarApi extends Controller
                     $isInArray = false;                       
                 } else {
                     $isInArray = true;
-                    $municipalityCurrent = new Municipality(
-                        $festivity->municipality_code, 
-                        $festivity->municipality_name_es, 
-                        $festivity->municipality_name_eu,
-                        $festivity->territory_name,
+                    $municipalityCurrent = new MunicipalityForApi(
+                        $festivity->municipality->municipality_code, 
+                        $festivity->municipality->municipality_name_es, 
+                        $festivity->municipality->municipality_name_eu,
+                        $festivity->municipality->territory_name,
                         $festivity->festivity_name_es, 
                         $festivity->festivity_name_eu,
-                        $festivity->latwgs84, 
-                        $festivity->lonwgs84
+                        $festivity->municipality->latwgs84, 
+                        $festivity->municipality->lonwgs84
                     );
                     array_push($festivityDate->items, $municipalityCurrent);  
                     break;
@@ -45,15 +45,15 @@ class WorkCalendarApi extends Controller
             }
             if ($isInArray == false) {
                 $festivityDateCurrent = new FestivityDate(
-                    $festivity->festivity_date, 
-                    $festivity->municipality_code, 
-                    $festivity->municipality_name_es, 
-                    $festivity->municipality_name_eu,
-                    $festivity->territory_name,
-                    $festivity->festivity_name_es, 
+                    $festivity->festivity_date,
+                    $festivity->municipality->municipality_code,
+                    $festivity->municipality->municipality_name_es,
+                    $festivity->municipality->municipality_name_eu,
+                    $festivity->municipality->territory_name,
+                    $festivity->festivity_name_es,
                     $festivity->festivity_name_eu,
-                    $festivity->latwgs84, 
-                    $festivity->lonwgs84
+                    $festivity->municipality->latwgs84,
+                    $festivity->municipality->lonwgs84
                 );
                 $festivityDates[] = $festivityDateCurrent;
             } 
@@ -73,7 +73,7 @@ class WorkCalendarApi extends Controller
         *    in="path",
         *    name="year",
         *    required=true,
-        *    example="2021",
+        *    example="2022",
         *    @OA\Schema(
         *       type="integer",
         *       format="int64"
@@ -135,7 +135,7 @@ class WorkCalendarApi extends Controller
         *    in="path",
         *    name="year",
         *    required=true,
-        *    example="2021",
+        *    example="2022",
         *    @OA\Schema(
         *       type="integer",
         *       format="int64"
@@ -184,7 +184,7 @@ class WorkCalendarApi extends Controller
         *    in="path",
         *    name="year",
         *    required=true,
-        *    example="2021",
+        *    example="2022",
         *    @OA\Schema(
         *       type="integer",
         *       format="int64"
@@ -243,7 +243,7 @@ class WorkCalendarApi extends Controller
         *    in="path",
         *    name="year",
         *    required=true,
-        *    example="2021",
+        *    example="2022",
         *    @OA\Schema(
         *        type="integer",
         *        format="int64"
@@ -260,14 +260,24 @@ class WorkCalendarApi extends Controller
         * )
     */
     function getFestivitiesByMunicipality($territory, $municipality, $year) {
-        $festivitiesByMunicipality = Festivity::select('festivity_date', 'festivity_name_es','festivity_name_eu','municipality_code AS geo_code','municipality_name_es AS location_es','municipality_name_eu AS location_eu','territory_name','latwgs84','lonwgs84')
+        $festivitiesByMunicipality = Festivity::join('municipalities', 'municipalities.id', '=', 'festivities.municipality_id')
+        ->select(
+            'festivities.festivity_date', 
+            'festivities.festivity_name_es',
+            'festivities.festivity_name_eu',
+            'municipalities.municipality_code AS geo_code',
+            'municipalities.municipality_name_es AS location_es',
+            'municipalities.municipality_name_eu AS location_eu',
+            'municipalities.territory_name',
+            'municipalities.latwgs84',
+            'municipalities.lonwgs84')
         ->orWhere(static function ($queryMunicipality) use ($territory, $municipality) {
-                $queryMunicipality->where('municipality_code', '=', $municipality)
-                    ->orWhere('municipality_code', '=', '16')
-                    ->orWhere('municipality_code', '=', $territory);
+                $queryMunicipality->where('municipalities.municipality_code', '=', $municipality)
+                    ->orWhere('municipalities.municipality_code', '=', '16')
+                    ->orWhere('municipalities.municipality_code', '=', $territory);
             })
-            ->whereYear('festivity_date', '=', $year)
-            ->orderby('festivity_date', 'asc')
+            ->whereYear('festivities.festivity_date', '=', $year)
+            ->orderby('festivities.festivity_date', 'asc')
             ->get();   
         return response()->json($festivitiesByMunicipality, 201);
     }
@@ -295,7 +305,7 @@ class WorkCalendarApi extends Controller
         *    in="path",
         *    name="year",
         *    required=true,
-        *    example="2021",
+        *    example="2022",
         *    @OA\Schema(
         *        type="integer",
         *        format="int64"
@@ -311,14 +321,23 @@ class WorkCalendarApi extends Controller
         *   )
         * )
     */
-    function getFestivitiesByTerritory($territory, $year) {
-        $festivitiesByTerritory = Festivity::select('festivity_date', 'festivity_name_es','festivity_name_eu','municipality_code AS geo_code','municipality_name_es AS location_es','municipality_name_eu AS location_eu','territory_name')
+
+    function getFestivitiesByTerritory($territory, $year) {            
+        $festivitiesByTerritory = Festivity::join('municipalities', 'municipalities.id', '=', 'festivities.municipality_id')
+        ->select([
+            'festivities.festivity_date', 
+            'festivities.festivity_name_es',
+            'festivities.festivity_name_eu', 
+            'municipalities.municipality_code AS geo_code',
+            'municipalities.municipality_name_es AS location_es',
+            'municipalities.municipality_name_eu AS location_eu', 
+            'municipalities.territory_name'])
         ->orWhere(static function ($queryTerritory) use ($territory) {
-                $queryTerritory->where('municipality_code', '=', $territory)
-                    ->orWhere('municipality_code', '=', '16');
+                $queryTerritory->where('municipalities.municipality_code', '=', $territory)
+                    ->orWhere('municipalities.municipality_code', '=', '16');
             })
-            ->whereYear('festivity_date', '=', $year)
-            ->orderby('festivity_date', 'asc')
+            ->whereYear('festivities.festivity_date', '=', $year)
+            ->orderby('festivities.festivity_date', 'asc')
             ->get();
         return response()->json($festivitiesByTerritory, 201);
     }
@@ -335,7 +354,7 @@ class WorkCalendarApi extends Controller
         *    in="path",
         *    name="year",
         *    required=true,
-        *    example="2021",
+        *    example="2022",
         *    @OA\Schema(
         *        type="integer",
         *        format="int64"
@@ -351,12 +370,18 @@ class WorkCalendarApi extends Controller
         *   )
         * )
     */
-
     function getBasqueFestivities($year) {
-        $basqueFestivities = Festivity::select('festivity_date', 'festivity_name_es','festivity_name_eu','municipality_code AS geo_code','municipality_name_es AS location_es','municipality_name_eu AS location_eu')
-            ->whereYear('festivity_date', '=', $year)
-            ->where('municipality_code', '=', '16')
-            ->orderby('festivity_date', 'asc')
+        $basqueFestivities = Festivity::join('municipalities', 'municipalities.id', '=', 'festivities.municipality_id')
+        ->select([
+            'festivities.festivity_date', 
+            'festivities.festivity_name_es',
+            'festivities.festivity_name_eu',
+            'municipalities.municipality_code AS geo_code',
+            'municipalities.municipality_name_es AS location_es',
+            'municipalities.municipality_name_eu AS location_eu'])
+            ->whereYear('festivities.festivity_date', '=', $year)
+            ->where('municipalities.municipality_code', '=', '16')
+            ->orderby('festivities.festivity_date', 'asc')
             ->get();
         return response()->json($basqueFestivities, 201);
     }
@@ -377,9 +402,15 @@ class WorkCalendarApi extends Controller
         * )
     */
     function getMunicipalities() {
-        $municipalities = Festivity::select('municipality_code','municipality_name_es','municipality_name_eu','territory_code', 'territory_name','latwgs84','lonwgs84')
+        $municipalities = Municipality::select([
+            'municipality_code',
+            'municipality_name_es',
+            'municipality_name_eu',
+            'territory_code', 
+            'territory_name',
+            'latwgs84',
+            'lonwgs84'])
         ->where('municipality_code', '>', 50)
-        ->whereYear('festivity_date', '=', 2022)
         ->orderby('municipality_code', 'asc')
         ->get();
         return response()->json($municipalities, 201);
@@ -401,13 +432,11 @@ class WorkCalendarApi extends Controller
         * )
     */
     function getTerritories() {
-        $territories = Festivity::select('territory_code','territory_name')
+        $territories = Municipality::select('territory_code','territory_name')
         ->where('municipality_code', '<', 50)
         ->where('municipality_code', '!=', 16)
-        ->whereYear('festivity_date', '=', 2022)
         ->orderby('territory_code', 'asc')
         ->get();
         return response()->json($territories, 201);
-    }
-    
+    } 
 }

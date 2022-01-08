@@ -6,6 +6,14 @@
         <title>{{ $title }}</title>
         <link href="/styles/styles.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-SQ79RED3LT"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+                gtag('config', 'G-SQ79RED3LT');
+        </script>
     </head>
     <body>
         <header>
