@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\http\Controllers\WorkCalendarApi;
+use App\Http\Controllers\WorkCalendarApi;
 
 /*
 |--------------------------------------------------------------------------
